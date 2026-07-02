@@ -1,0 +1,77 @@
+﻿@model Clinc.ViewModels.AppointmentsVM
+
+@{
+    ViewData["Title"] = "تعديل الموعد";
+}
+
+<div class="container mt-4" dir="rtl">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white p-3">
+            <h4 class="mb-0"><i class="bi bi-pencil-square me-2"></i> تعديل بيانات الموعد</h4>
+        </div>
+        <div class="card-body p-4">
+
+            <form asp-action="Edit" method="post">
+                <input type="hidden" asp-for="Id" />
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="DoctorId" class="form-label fw-bold">الدكتور</label>
+                        <select asp-for="DoctorId" asp-items="Model.Doctors" class="form-select">
+                            <option value="">-- اختر الدكتور --</option>
+                        </select>
+                        <span asp-validation-for="DoctorId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="PatientId" class="form-label fw-bold">المريض</label>
+                        <select asp-for="PatientId" asp-items="Model.Patients" class="form-select">
+                            <option value="">-- اختر المريض --</option>
+                        </select>
+                        <span asp-validation-for="PatientId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="AppointmentDate" class="form-label fw-bold">تاريخ ووقت الموعد</label>
+                        <input asp-for="AppointmentDate" type="datetime-local" class="form-control" />
+                        <span asp-validation-for="AppointmentDate" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Status" class="form-label fw-bold">حالة الموعد</label>
+                        <select asp-for="Status" class="form-select">
+                            <option value="مؤكد">مؤكد</option>
+                            <option value="قيد الانتظار">قيد الانتظار</option>
+                            <option value="ملغي">ملغي</option>
+                            <option value="مكتمل">مكتمل</option>
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="form-check form-switch mb-4 fs-5">
+                    <input asp-for="IsFollowUp" class="form-check-input" type="checkbox" role="switch">
+                    <label asp-for="IsFollowUp" class="form-check-label ms-2">هل الزيارة (إعادة كشف / استشارة)؟</label>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Notes" class="form-label fw-bold">ملاحظات طبية أو إدارية</label>
+                    <textarea asp-for="Notes" class="form-control" rows="3" placeholder="اكتب أي ملاحظات إضافية هنا..."></textarea>
+                    <span asp-validation-for="Notes" class="text-danger small"></span>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-success px-4">حفظ التعديلات</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary px-4">إلغاء</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

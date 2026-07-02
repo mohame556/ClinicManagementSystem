@@ -1,0 +1,192 @@
+﻿@{
+    ViewData["Title"] = "التقارير";
+}
+
+<style>
+    /* =================================================== */
+    /* تنسيق كارد التقارير والأيقونات التفاعلية */
+    /* =================================================== */
+    .page-title {
+        font-weight: 700;
+        font-size: 1.8rem;
+        position: relative;
+        padding-bottom: 15px;
+    }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #3B82F6, #06B6D4);
+            border-radius: 2px;
+        }
+
+    .report-card {
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+    }
+
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08) !important;
+            border-color: #3B82F6;
+        }
+
+    /* أيقونات التقارير المميزة */
+    .report-icon-wrapper {
+        width: 55px;
+        height: 55px;
+        border-radius: 12px;
+        background-color: rgba(59, 130, 246, 0.08);
+        color: #3B82F6;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1.2rem;
+        transition: all 0.3s ease;
+    }
+
+    .report-card:hover .report-icon-wrapper {
+        background-color: #3B82F6;
+        color: #ffffff;
+    }
+
+    .report-card h4 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        line-height: 1.6;
+        min-height: 50px;
+    }
+
+    /* أزرار مخصصة متناسقة مع أزرار الحفظ السابقة */
+    .btn-custom {
+        border-radius: 10px;
+        padding: 0.6rem 1.8rem;
+        font-weight: 600;
+        background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+        border: none;
+        transition: all 0.25s ease;
+    }
+
+        .btn-custom:hover {
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+            transform: translateY(-1px);
+        }
+</style>
+
+<div class="container mt-4" dir="rtl">
+
+    <h2 class="text-center mb-5 page-title">
+        <i class="fas fa-chart-pie me-2 text-primary"></i> مركز التقارير والإحصائيات
+    </h2>
+
+    <div class="row text-center">
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm report-card p-4">
+                <div class="card-body p-0">
+                    <div class="report-icon-wrapper">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h4 class="mb-4">كشوفات الطبيب خلال فترة زمنية</h4>
+                </div>
+                <div class="card-footer bg-transparent border-0 pt-0">
+                    <a asp-controller="Reports" asp-action="DoctorReport" class="btn btn-primary btn-custom w-100">
+                        <i class="fas fa-eye me-1"></i> عرض التقرير
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm report-card p-4">
+                <div class="card-body p-0">
+                    <div class="report-icon-wrapper">
+                        <i class="fas fa-user-injured"></i>
+                    </div>
+                    <h4 class="mb-4">بيانات ومواعيد مريض محدد</h4>
+                </div>
+                <div class="card-footer bg-transparent border-0 pt-0">
+                    <a asp-controller="Reports" asp-action="PatientReport" class="btn btn-primary btn-custom w-100">
+                        <i class="fas fa-eye me-1"></i> عرض التقرير
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm report-card p-4">
+                <div class="card-body p-0">
+                    <div class="report-icon-wrapper">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h4 class="mb-4">المواعيد الإجمالية بين تاريخين</h4>
+                </div>
+                <div class="card-footer bg-transparent border-0 pt-0">
+                    <a asp-controller="Reports" asp-action="AppointmentsReport" class="btn btn-primary btn-custom w-100">
+                        <i class="fas fa-eye me-1"></i> عرض التقرير
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm report-card p-4">
+                <div class="card-body p-0">
+                    <div class="report-icon-wrapper">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h4 class="mb-4">جميع مواعيد وحجوزات اليوم</h4>
+                </div>
+                <div class="card-footer bg-transparent border-0 pt-0">
+                    <a asp-controller="Reports" asp-action="TodayAppointments" class="btn btn-primary btn-custom w-100">
+                        <i class="fas fa-eye me-1"></i> عرض التقرير
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm report-card p-4">
+                <div class="card-body p-0">
+                    <div class="report-icon-wrapper">
+                        <i class="fas fa-hourglass-half"></i>س
+                    </div>
+                    <h4 class="mb-4">جميع الحجوزات القائمة والمعلقة</h4>
+                </div>
+                <div class="card-footer bg-transparent border-0 pt-0">
+                    <a asp-controller="Reports" asp-action="PendingAppointments" class="btn btn-primary btn-custom w-100">
+                        <i class="fas fa-eye me-1"></i> عرض التقرير
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm report-card p-4">
+                <div class="card-body p-0">
+                    <div class="report-icon-wrapper">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h4 class="mb-4">تحليل الأداء وإحصائيات النظام</h4>
+                </div>
+                <div class="card-footer bg-transparent border-0 pt-0">
+                    <a asp-controller="Reports" asp-action="Statistics" class="btn btn-primary btn-custom w-100">
+                        <i class="fas fa-eye me-1"></i> عرض التقرير
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

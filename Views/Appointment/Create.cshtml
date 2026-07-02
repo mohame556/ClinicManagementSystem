@@ -1,0 +1,269 @@
+﻿@model Clinc.ViewModels.AppointmentsVM
+
+<!-- أيقونات Bootstrap لتجميل التصميم -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<!-- ملف الـ CSS الخاص بـ Select2 -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<style>
+    /* =================================================== */
+    /* تنسيق الكارد العام وعناصر الإدخال الأساسية */
+    /* =================================================== */
+    .appointment-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        border: 1px solid #F1F5F9;
+        padding: 2.5rem;
+        max-width: 700px;
+        margin: 2rem auto;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #475569;
+        margin-bottom: 0.6rem;
+        font-size: 0.95rem;
+    }
+
+    .form-control, .form-select {
+        border-radius: 12px !important;
+        padding: 0.75rem 1rem;
+        border: 1.5px solid #E2E8F0;
+        transition: all 0.25s ease;
+        background-color: #F8FAFC;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+            background-color: #fff;
+            outline: none;
+        }
+
+    .fees-badge {
+        background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+        border: 1px solid #BFDBFE;
+        border-radius: 14px;
+        padding: 1.2rem;
+        color: #1E40AF;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+        border: none;
+        border-radius: 12px;
+        padding: 0.85rem 2rem;
+        font-weight: 600;
+        transition: all 0.25s ease;
+    }
+
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+        }
+
+    /* =================================================== */
+    /* تنسيق فخم لـ Select2 ليتماشى مع التوجه الحديث */
+    /* =================================================== */
+
+    /* الحقل الرئيسي المستهدف للاختيار */
+    .select2-container--default .select2-selection--single {
+        border: 1.5px solid #E2E8F0 !important;
+        border-radius: 12px !important;
+        height: auto !important;
+        padding: 0.65rem 0.8rem !important;
+        background-color: #F8FAFC !important;
+        transition: all 0.25s ease !important;
+    }
+
+    /* عند التركيز على القائمة أو فتحها */
+    .select2-container--default.select2-container--open .select2-selection--single,
+    .select2-container--default.select2-container--focus .select2-selection--single {
+        border-color: #3B82F6 !important;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12) !important;
+        background-color: #fff !important;
+    }
+
+    /* النص الحالي داخل الحقل المختَار */
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #1E293B !important;
+        padding-right: 0px !important;
+        line-height: 1.5 !important;
+    }
+
+    /* سهم الاختيار الجانبي (منقول لليسار ليدعم العربي) */
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        left: 12px !important;
+        right: auto !important;
+    }
+
+    /* الصندوق المنسدل للخيارات */
+    .select2-dropdown {
+        border: 1px solid #E2E8F0 !important;
+        border-radius: 12px !important;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+        overflow: hidden;
+        z-index: 1060;
+    }
+
+    /* مربع البحث الداخلي المنسدل */
+    .select2-container--default .select2-search--dropdown .select2-search__field {
+        border: 1.5px solid #E2E8F0 !important;
+        border-radius: 8px !important;
+        padding: 0.5rem !important;
+    }
+
+        .select2-container--default .select2-search--dropdown .select2-search__field:focus {
+            border-color: #3B82F6 !important;
+            outline: none !important;
+        }
+
+    /* الخيارات الفردية داخل القائمة */
+    .select2-container--default .select2-results__option {
+        padding: 0.7rem 1rem !important;
+        font-size: 0.95rem;
+    }
+
+    /* حركة الماوس Hover فوق خيار معين */
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+        background-color: #3B82F6 !important;
+        color: white !important;
+    }
+
+    /* الخيار المختار حالياً من قبل المستخدم */
+    .select2-container--default .select2-results__option[aria-selected=true] {
+        background-color: #EFF6FF !important;
+        color: #1E40AF !important;
+    }
+</style>
+
+<div class="container" dir="rtl">
+    <div class="appointment-card">
+        <!-- عنوان الفورم -->
+        <h3 class="text-center mb-4 text-primary font-weight-bold">
+            <i class="bi bi-calendar-plus-fill me-2"></i> حجز موعد جديد
+        </h3>
+
+        <form asp-action="Create">
+            <input type="hidden" id="doctorFees" />
+            <input type="hidden" id="doctorReFees" />
+
+            <div class="row">
+                <!-- صف حقل اختيار الطبيب -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label"><i class="bi bi-person-badge text-primary me-1"></i> الطبيب</label>
+                    <select asp-for="DoctorId" id="DoctorId" asp-items="Model.Doctors" class="form-select select2">
+                        <option value="">اختر الطبيب</option>
+                    </select>
+                </div>
+
+                <!-- صف حقل اختيار المريض -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label"><i class="bi bi-person text-primary me-1"></i> المريض</label>
+                    <select asp-for="PatientId" asp-items="Model.Patients" class="form-select select2">
+                        <option value="">اختر المريض</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- صف تاريخ الموعد -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label"><i class="bi bi-clock text-primary me-1"></i> تاريخ الموعد</label>
+                    <input asp-for="AppointmentDate" type="datetime-local" class="form-control" />
+                </div>
+
+                <!-- صف نوع الزيارة -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label"><i class="bi bi-arrow-repeat text-primary me-1"></i> نوع الزيارة</label>
+                    <select asp-for="VisitType" id="visitType" class="form-select">
+                        <option value="كشف">كشف</option>
+                        <option value="إعادة">إعادة</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- كارد عرض قيمة الرسوم المستحقة تلقائياً -->
+            <div class="mb-4">
+                <div class="fees-badge">
+                    <span><i class="bi bi-cash-coin me-2"></i> رسوم الزيارة المستحقة:</span>
+                    <span class="fs-5"><span id="feesText">0</span> جنيه</span>
+                </div>
+            </div>
+
+            <!-- الملاحظات الإضافية -->
+            <div class="mb-4">
+                <label class="form-label"><i class="bi bi-sticky text-primary me-1"></i> ملاحظات</label>
+                <textarea asp-for="Notes" class="form-control" rows="3" placeholder="اكتب أي ملاحظات إضافية هنا..."></textarea>
+            </div>
+
+            <!-- زر التقديم والحفظ -->
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-submit text-white">
+                    <i class="bi bi-check-circle-fill me-2"></i> حفظ الموعد وإدراجه
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- جلب ملفات الـ JS اللازمة للتشغيل بالترتيب الصحيح -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // تهيئة وتفعيل الـ Select2 مع دعم الاتجاه العربي والـ Responsive الكامل
+        $('.select2').select2({
+            width: '100%',
+            dir: "rtl"
+        });
+    });
+
+    const doctorSelect = document.getElementById("DoctorId");
+    const visitType = document.getElementById("visitType");
+    const feesText = document.getElementById("feesText");
+
+    let examFee = 0;
+    let reExamFee = 0;
+
+    // التنصت لحدث تغيير اختيار الطبيب عبر jQuery ليتوافق مع أداة Select2
+    $(doctorSelect).on("change", function () {
+        const doctorId = this.value;
+
+        if (!doctorId) {
+            examFee = 0;
+            reExamFee = 0;
+            feesText.innerText = 0;
+            return;
+        }
+
+        // جلب قيم الرسوم الفردية للطبيب من خلال الـ API الخلفي
+        fetch('/Appointment/GetDoctorFees?id=' + doctorId)
+            .then(res => res.json())
+            .then(data => {
+                examFee = data.examinationFee;
+                reExamFee = data.reExaminationFee;
+
+                updateFees();
+            });
+    });
+
+    // التنصت لتحديث السعر عند تغيير نوع الزيارة (كشف / إعادة)
+    visitType.addEventListener("change", updateFees);
+
+    function updateFees() {
+        if (visitType.value === "كشف") {
+            feesText.innerText = examFee;
+        } else {
+            feesText.innerText = reExamFee;
+        }
+    }
+</script>

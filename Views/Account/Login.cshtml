@@ -1,0 +1,154 @@
+﻿@{
+    Layout = "LoginLayout";
+}
+
+@model Clinc.ViewModels.LoginVM
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .login-container {
+        background: rgba(255, 255, 255, 0.90);
+        backdrop-filter: blur(10px);
+        padding: 2.5rem;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        width: 100%;
+        max-width: 420px;
+    }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+    .brand-logo {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        margin: 0 auto 1.5rem auto;
+        box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+    }
+
+    .form-title {
+        color: #2c3e50;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+    .form-subtitle {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+        margin-bottom: 2rem;
+    }
+
+    .form-floating > .form-control:focus ~ label,
+    .form-floating > .form-control:not(:placeholder-shown) ~ label {
+        right: 0;
+        left: auto;
+    }
+
+    .custom-input {
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+        background-color: #f8f9fa;
+    }
+
+        .custom-input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.15);
+            background-color: #fff;
+        }
+
+    .btn-login {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        border: none;
+        border-radius: 10px;
+        padding: 0.75rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+    }
+
+        .btn-login:hover {
+            background: linear-gradient(135deg, #0056b3, #004085);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+        }
+
+    .form-check-input:checked {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .validation-summary ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+</style>
+
+<!-- تم إزالة الـ container الافتراضي لأن الاستايل الجديد يتكفل بالتوسط المريح في الشاشة -->
+<div class="login-container" dir="rtl">
+
+    <!-- أيقونة طبية تعبيرية صممت بالـ CSS ويمكنك استبدالها بلوجو العيادة -->
+    <div class="brand-logo">
+        <i class="fas fa-stethoscope">🩺</i>
+    </div>
+
+    <h3 class="text-center form-title mb-1">مرحباً بك مجدداً</h3>
+    <p class="text-center form-subtitle">الرجاء تسجيل الدخول </p>
+
+    <form asp-action="Login" method="post" autocomplete="off">
+
+        <div class="mb-3">
+            <input asp-for="Email" class="form-control custom-input" placeholder="البريد الإلكتروني" />
+            <span asp-validation-for="Email" class="text-danger small mt-1 d-block"></span>
+        </div>
+
+        <div class="mb-3">
+            <input asp-for="Password" type="password" class="form-control custom-input" placeholder="كلمة المرور" />
+            <span asp-validation-for="Password" class="text-danger small mt-1 d-block"></span>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="form-check">
+                <input asp-for="RememberMe" class="form-check-input" id="rememberMeCheck" />
+                <label class="form-check-label text-muted small" for="rememberMeCheck">تذكرني </label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-login w-100 mb-3">تسجيل الدخول  </button>
+
+        <div asp-validation-summary="All" class="text-danger validation-summary small text-center mt-2"></div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

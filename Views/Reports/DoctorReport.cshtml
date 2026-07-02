@@ -1,0 +1,249 @@
+﻿@model Clinc.ViewModels.DoctorReportVM
+
+<style>
+    /* تحسينات عامة والخط */
+    body {
+        background-color: #f4f6f9;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* عنوان الصفحة */
+    .page-header {
+        color: #2c3e50;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 12px;
+        margin-bottom: 30px;
+    }
+
+        .page-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #007bff, #00d2ff);
+            border-radius: 2px;
+        }
+
+    /* كارت الفلتر والبحث */
+    .filter-card {
+        background: #ffffff;
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        padding: 25px;
+        margin-bottom: 30px;
+    }
+
+        .filter-card .form-label {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+
+        .filter-card .form-control {
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            padding: 10px 15px;
+            transition: all 0.3s;
+        }
+
+            .filter-card .form-control:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+            }
+
+    /* زر البحث */
+    .btn-search {
+        border-radius: 8px;
+        padding: 10px 30px;
+        font-weight: 600;
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        border: none;
+        width: 100%;
+        margin-top: 32px; /* ليركب على محاذاة الحقول */
+        transition: all 0.3s;
+    }
+
+        .btn-search:hover {
+            background: linear-gradient(135deg, #0056b3, #004085);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+        }
+
+    /* كروت الإحصائيات الجذابة */
+    .stat-card {
+        border: none;
+        border-radius: 12px;
+        color: white;
+        padding: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .stat-blue {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+    }
+
+    .stat-teal {
+        background: linear-gradient(135deg, #11998e, #38ef7d);
+    }
+
+    .stat-card .stat-title {
+        font-size: 0.95rem;
+        opacity: 0.9;
+        margin-bottom: 5px;
+    }
+
+    .stat-card .stat-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+
+    /* تصميم الجدول الاحترافي */
+    .custom-table-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        overflow: hidden;
+        border: none;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+        .table thead {
+            background-color: #f8f9fa;
+        }
+
+        .table th {
+            color: #4a5568;
+            font-weight: 600;
+            border-bottom: 2px solid #edf2f7;
+            padding: 15px;
+        }
+
+        .table td {
+            padding: 15px;
+            vertical-align: middle;
+            color: #2d3748;
+            border-top: 1px solid #edf2f7;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+    /* الbadges الخاصة بالحالة */
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 30px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        background-color: #e2e8f0;
+        color: #4a5568;
+    }
+</style>
+
+<div class="container mt-5" dir="rtl" class="text-right">
+
+    <h2 class="page-header">تقرير الدكتور</h2>
+
+    <!-- كارت الفلتر والبحث السريع -->
+    <div class="filter-card">
+        <form asp-action="DoctorReport" method="post">
+            <div class="row align-items-center">
+
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <label class="form-label">الدكتور</label>
+                    <select asp-for="DoctorId" class="form-control form-select">
+                        <option value="">اختر الدكتور</option>
+                        @foreach (var doctor in Model.Doctors)
+                        {
+                            <option value="@doctor.Id">
+                                @doctor.Doctor_Name
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-3 mb-3 mb-md-0">
+                    <label class="form-label">من تاريخ</label>
+                    <input asp-for="FromDate" type="date" class="form-control" />
+                </div>
+
+                <div class="col-md-3 mb-3 mb-md-0">
+                    <label class="form-label">إلى تاريخ</label>
+                    <input asp-for="ToDate" type="date" class="form-control" />
+                </div>
+
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary btn-search">
+                        <i class="fas fa-search me-1"></i> بحث
+                    </button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    @if (Model.Appointments != null)
+    {
+        <!-- قسم الإحصائيات السريعة -->
+        <div class="row">
+            <div class="col-md-6 col-lg-4">
+                <div class="stat-card stat-blue d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="stat-title">عدد الكشوفات الكلي</div>
+                        <div class="stat-value">@Model.TotalAppointments</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="stat-card stat-teal d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="stat-title">عدد المرضى الإجمالي</div>
+                        <div class="stat-value">@Model.TotalPatients</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- كارت الجدول -->
+        <div class="card custom-table-card mt-3">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>المريض</th>
+                            <th>التاريخ</th>
+                            <th>الحالة</th>
+                            <th>ملاحظات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Appointments)
+                        {
+                            <tr>
+                                <td class="fw-bold text-secondary">@item.Patient?.Patient_Name</td>
+                                <td>
+                                    <span class="text-muted">
+                                        @item.AppointmentDate.ToString("yyyy-MM-dd")
+                                    </span>
+                                </td>
+                                <td>
+                                    <!-- تم وضع الحالة داخل بادج رمزي أنيق -->
+                                    <span class="status-badge">@item.Status</span>
+                                </td>
+                                <td class="text-muted">@(string.IsNullOrEmpty(item.Notes) ? "-" : item.Notes)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

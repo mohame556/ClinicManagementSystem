@@ -1,0 +1,98 @@
+﻿@model List<Clinc.Models.Appointment>
+
+@{
+    ViewData["Title"] = "مواعيد اليوم";
+}
+
+<div class="container mt-4" dir="rtl">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary m-0">
+            <i class="bi bi-calendar-check me-2"></i> جدول مواعيد اليوم
+        </h2>
+        <div class="text-end">
+            <span class="badge bg-primary fs-6 px-3 py-2">
+                @DateTime.Today.ToString("dd MMMM yyyy")
+            </span>
+            @if (Model != null && Model.Any())
+            {
+                <span class="badge bg-dark fs-6 px-3 py-2 ms-1">
+                    إجمالي المواعيد: @Model.Count
+                </span>
+            }
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive card shadow-sm border-0">
+            <table class="table table-hover align-middle mb-0 text-center">
+                <thead class="table-primary text-dark">
+                    <tr>
+                        <th scope="col" class="text-start pr-4">المريض</th>
+                        <th scope="col">الدكتور</th>
+                        <th scope="col">الوقت</th>
+                        <th scope="col">الحالة</th>
+                        <th scope="col" style="max-width: 200px;">ملاحظات</th>
+                        <th scope="col" class="d-print-none">إجراء سريع</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-start fw-bold pr-4">
+                                @(item.Patient?.Patient_Name ?? "مريض غير مسجل")
+                            </td>
+
+                            <td>
+                                <span class="text-muted small">د./</span> @(item.Doctor?.Doctor_Name ?? "غير محدد")
+                            </td>
+
+                            <td>
+                                <span class="direction-ltr d-inline-block fw-bold text-secondary">
+                                    @item.AppointmentDate.ToString("hh:mm tt")
+                                </span>
+                            </td>
+
+                            <td>
+                                @{
+                                    var badgeClass = item.Status == "مؤكد" ? "bg-success" :
+                                    item.Status == "ملغي" ? "bg-danger" :
+                                    item.Status == "مكتمل" ? "bg-info text-dark" : "bg-warning text-dark";
+                                }
+                                <span class="badge @badgeClass px-3 py-2">@item.Status</span>
+                            </td>
+
+                            <td class="text-muted small text-truncate" style="max-width: 200px;" title="@item.Notes">
+                                @(string.IsNullOrEmpty(item.Notes) ? "-" : item.Notes)
+                            </td>
+
+                            <td class="d-print-none">
+                                <div class="d-flex justify-content-center gap-1">
+                                    <a asp-action="Complete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success py-1" title="تغيير الحالة إلى مكتمل">
+                                        <i class="bi bi-check-all"></i> مكتمل
+                                    </a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-light border py-1" title="عرض التفاصيل">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="card border-0 shadow-sm text-center p-5 bg-white rounded-3">
+            <div class="card-body">
+                <div class="bg-light text-muted rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                    <i class="bi bi-calendar-x fs-1"></i>
+                </div>
+                <h4 class="text-secondary mb-2">لا توجد مواعيد مجدولة لليوم</h4>
+                <p class="text-muted mb-0">لم يتم حجز أو تسجيل أي مواعيد طبية لهذا التاريخ حتى الآن.</p>
+            </div>
+        </div>
+    }
+</div>

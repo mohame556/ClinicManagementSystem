@@ -1,0 +1,52 @@
+﻿@model Clinc.Models.Appointment
+
+@{
+    ViewData["Title"] = "تفاصيل الموعد";
+}
+
+<div class="container mt-4" dir="rtl">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary m-0">تفاصيل الموعد</h2>
+        <span class="badge @(Model.Status == "مؤكد" ? "bg-success" : "bg-warning text-dark") fs-6 p-2">
+            @Model.Status
+        </span>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4">
+            <h5 class="card-title text-muted mb-4">معلومات الموعد الأساسية</h5>
+            <hr />
+
+            <div class="row g-3 fs-5">
+                <div class="col-md-6">
+                    <p><strong>المريض:</strong> <span class="text-dark">@(Model.Patient?.Patient_Name ?? "غير محدد")</span></p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>الدكتور:</strong> <span class="text-dark">@(Model.Doctor?.Doctor_Name ?? "غير محدد")</span></p>
+                </div>
+
+                <div class="col-md-6">
+                    <p><strong>التاريخ والوقت:</strong> <span class="text-secondary">@Model.AppointmentDate.ToString("dd/MM/yyyy hh:mm tt")</span></p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>نوع الزيارة:</strong> <span class="badge bg-info text-dark">@(Model.IsFollowUp ? "إعادة (استشارة)" : "كشف جديد")</span></p>
+                </div>
+
+                <div class="col-md-6">
+                    <p><strong>الرسوم المالية:</strong> <span class="text-success fw-bold">@Model.Fees.ToString("C0")</span></p>
+                </div>
+                <div class="col-md-12 mt-3">
+                    <p><strong>ملاحظات:</strong></p>
+                    <div class="p-3 bg-light rounded text-muted fs-6">
+                        @(string.IsNullOrEmpty(Model.Notes) ? "لا توجد ملاحظات مسجلة لهذا الموعد." : Model.Notes)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning px-4">تعديل الموعد</a>
+        <a asp-action="Index" class="btn btn-outline-secondary px-4">رجوع للقائمة</a>
+    </div>
+</div>

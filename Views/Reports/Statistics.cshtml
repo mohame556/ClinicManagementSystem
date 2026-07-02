@@ -1,0 +1,186 @@
+﻿@model Clinc.ViewModels.StatisticsVM
+
+@{
+    ViewData["Title"] = "إحصائيات النظام";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+<style>
+    body {
+        direction: rtl;
+    }
+
+    .stats-header {
+        margin-bottom: 30px;
+    }
+
+    .stats-header h2 {
+        font-weight: 700;
+        color: #2c3e50;
+    }
+
+    .stats-card {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0,0,0,.08);
+        transition: all .3s ease;
+        height: 100%;
+    }
+
+    .stats-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(0,0,0,.15);
+    }
+
+    .stats-card .card-body {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 25px;
+    }
+
+    .stats-icon {
+        font-size: 45px;
+        opacity: .25;
+    }
+
+    .stats-title {
+        font-size: 16px;
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+
+    .stats-number {
+        font-size: 35px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #4e73df, #224abe);
+    }
+
+    .bg-gradient-success {
+        background: linear-gradient(135deg, #1cc88a, #13855c);
+    }
+
+    .bg-gradient-info {
+        background: linear-gradient(135deg, #36b9cc, #258391);
+    }
+
+    .bg-gradient-warning {
+        background: linear-gradient(135deg, #f6c23e, #dda20a);
+    }
+
+    .bg-gradient-secondary {
+        background: linear-gradient(135deg, #858796, #60616f);
+    }
+
+    .bg-gradient-danger {
+        background: linear-gradient(135deg, #e74a3b, #be2617);
+    }
+</style>
+
+<div class="container-fluid">
+
+    <div class="stats-header text-center">
+        <h2>
+            <i class="fa-solid fa-chart-line ms-2"></i>
+            لوحة إحصائيات النظام
+        </h2>
+        <p class="text-muted">
+            نظرة سريعة على أداء وإحصائيات العيادة
+        </p>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- إجمالي الأطباء -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card stats-card text-white bg-gradient-primary">
+                <div class="card-body">
+                    <div>
+                        <div class="stats-title">إجمالي الأطباء</div>
+                        <h2 class="stats-number">@Model.DoctorsCount</h2>
+                    </div>
+
+                    <i class="fa-solid fa-user-doctor stats-icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- إجمالي المرضى -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card stats-card text-white bg-gradient-success">
+                <div class="card-body">
+                    <div>
+                        <div class="stats-title">إجمالي المرضى</div>
+                        <h2 class="stats-number">@Model.PatientsCount</h2>
+                    </div>
+
+                    <i class="fa-solid fa-hospital-user stats-icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- إجمالي الحجوزات -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card stats-card text-white bg-gradient-info">
+                <div class="card-body">
+                    <div>
+                        <div class="stats-title">إجمالي المواعيد</div>
+                        <h2 class="stats-number">@Model.AppointmentsCount</h2>
+                    </div>
+
+                    <i class="fa-solid fa-calendar-check stats-icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- مواعيد اليوم -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card stats-card text-dark bg-gradient-warning">
+                <div class="card-body">
+                    <div>
+                        <div class="stats-title">مواعيد اليوم</div>
+                        <h2 class="stats-number">@Model.TodayAppointments</h2>
+                    </div>
+
+                    <i class="fa-solid fa-calendar-day stats-icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- المواعيد المكتملة -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card stats-card text-white bg-gradient-secondary">
+                <div class="card-body">
+                    <div>
+                        <div class="stats-title">المواعيد المكتملة</div>
+                        <h2 class="stats-number">@Model.CompletedAppointments</h2>
+                    </div>
+
+                    <i class="fa-solid fa-circle-check stats-icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- المواعيد الملغاة -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card stats-card text-white bg-gradient-danger">
+                <div class="card-body">
+                    <div>
+                        <div class="stats-title">المواعيد الملغاة</div>
+                        <h2 class="stats-number">@Model.CancelledAppointments</h2>
+                    </div>
+
+                    <i class="fa-solid fa-calendar-xmark stats-icon"></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

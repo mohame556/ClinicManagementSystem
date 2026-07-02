@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+
+    <!-- بوتستراب الأساسي -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- إضافة مكتبة FontAwesome للأيقونات عشان تظهر أيقونة السماعة الطبية بشكل شيك -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+
+<body>
+
+    <!-- شيلنا الـ container والـ bg-light عشان الصفحة تفرش براحتها والخلفية المتدرجة تملى الشاشة -->
+    @RenderBody()
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

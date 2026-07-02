@@ -1,0 +1,120 @@
+﻿@model Clinc.ViewModels.PatientReportVM
+
+@{
+    ViewData["Title"] = "تقرير المريض الشامل";
+}
+
+<div class="container mt-4" dir="rtl">
+    <div class="d-flex align-items-center mb-4">
+        <h2 class="text-primary m-0">
+            <i class="bi bi-file-earmark-medical me-2"></i> الملف الطبي والتقرير الشامل للمريض
+        </h2>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body bg-light p-4">
+            <form asp-action="PatientReport" method="post">
+                <div class="row align-items-end g-3">
+                    <div class="col-md-8">
+                        <label asp-for="PatientId" class="form-label fw-bold text-secondary">ابحث واختر المريض</label>
+                        <select asp-for="PatientId" class="form-select fs-5">
+                            <option value="">-- اختر المريض من القائمة --</option>
+                            @foreach (var patient in Model.Patients)
+                            {
+                                <option value="@patient.Id">@patient.Patient_Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">
+                            <i class="bi bi-search me-1"></i> استخراج الملف الطبي
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model.Patient != null)
+    {
+        <hr class="my-4 d-print-none" />
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="text-dark m-0"><i class="bi bi-person-badge me-2"></i> السجل الشخصي للمريض</h4>
+            <button onclick="window.print();" class="btn btn-outline-dark btn-sm d-print-none">
+                <i class="bi bi-printer me-1"></i> طباعة الملف الطبي
+            </button>
+        </div>
+
+        <div class="card shadow-sm border-0 mb-4 bg-white border-start border-primary border-3">
+            <div class="card-body p-4">
+                <div class="row g-3 fs-5">
+                    <div class="col-sm-6 col-md-3">
+                        <span class="text-muted d-block small mb-1">الاسم الكامل</span>
+                        <strong class="text-dark">@Model.Patient.Patient_Name</strong>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <span class="text-muted d-block small mb-1">العمر</span>
+                        <span class="badge bg-secondary-subtle text-dark fs-6 mt-1">@Model.Patient.Age سنة</span>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <span class="text-muted d-block small mb-1">رقم الهاتف</span>
+                        <span class="text-secondary direction-ltr d-inline-block">@(string.IsNullOrEmpty(Model.Patient.Phone) ? "غير مسجل" : Model.Patient.Phone)</span>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <span class="text-muted d-block small mb-1">العنوان السكني</span>
+                        <span class="text-dark fs-6">@(string.IsNullOrEmpty(Model.Patient.Address) ? "غير محدد" : Model.Patient.Address)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="text-dark mb-3 mt-4"><i class="bi bi-calendar3 me-2"></i> تاريخ وجدول المواعيد السابقة والقادمة</h4>
+
+        @if (Model.Appointments != null && Model.Appointments.Any())
+        {
+            <div class="table-responsive card shadow-sm">
+                <table class="table table-hover align-middle mb-0 text-center">
+                    <thead class="table-primary text-dark">
+                        <tr>
+                            <th scope="col" class="text-start pr-4">الطبيب المعالج</th>
+                            <th scope="col">تاريخ ووقت الموعد</th>
+                            <th scope="col">حالة الموعد</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Appointments)
+                        {
+                            <tr>
+                                <td class="text-start fw-bold pr-4">
+                                    <span class="text-muted small fw-normal">د./</span> @(item.Doctor?.Doctor_Name ?? "غير محدد")
+                                </td>
+                                <td>
+                                    <span class="direction-ltr d-inline-block">
+                                        @item.AppointmentDate.ToString("dd/MM/yyyy hh:mm tt")
+                                    </span>
+                                </td>
+                                <td>
+                                    @{
+                                        var badgeClass = item.Status == "مؤكد" ? "bg-success" :
+                                        item.Status == "ملغي" ? "bg-danger" :
+                                        item.Status == "مكتمل" ? "bg-info text-dark" : "bg-warning text-dark";
+                                    }
+                                    <span class="badge @badgeClass px-3 py-2">@item.Status</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning text-center p-4 shadow-sm" role="alert">
+                <i class="bi bi-calendar-x fs-3 d-block mb-2"></i>
+                <h6 class="m-0">المريض مسجل بالنظام، ولكن لا توجد أي مواعيد مجدولة له حتى الآن.</h6>
+            </div>
+        }
+    }
+</div>

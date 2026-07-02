@@ -1,0 +1,54 @@
+﻿@model Clinc.Models.Doctors
+
+@{
+    ViewData["Title"] = "حذف الطبيب";
+}
+
+<div class="container mt-4" dir="rtl">
+    <!-- عنوان الصفحة -->
+    <h2 class="text-danger mb-4"><i class="bi bi-person-x-fill me-2"></i> حذف ملف طبيب</h2>
+
+    <!-- رسالة تحذيرية واضحة -->
+    <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+        <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
+        <div>
+            <strong>تنبيه هائل:</strong> هل أنت متأكد تماماً من حذف هذا الطبيب من النظام؟ هذا الإجراء قد يؤثر على المواعيد المرتبطة به.
+        </div>
+    </div>
+
+    <!-- بطاقة عرض بيانات الطبيب -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-light py-3">
+            <h5 class="card-title m-0 text-secondary">بيانات الطبيب المراد حذفه</h5>
+        </div>
+        <div class="card-body p-4">
+            <div class="row g-3 fs-5">
+                <div class="col-sm-4">
+                    <span class="text-muted d-block small">اسم الطبيب</span>
+                    <strong class="text-dark">@Model.Doctor_Name</strong>
+                </div>
+
+                <div class="col-sm-4">
+                    <span class="text-muted d-block small">التخصص الطبي</span>
+                    <span class="badge bg-primary fs-6 mt-1">@Model.Specialty</span>
+                </div>
+
+                <div class="col-sm-4">
+                    <span class="text-muted d-block small">رقم الهاتف</span>
+                    <span class="text-secondary direction-ltr d-inline-block">@(string.IsNullOrEmpty(Model.Phone) ? "غير مسجل" : Model.Phone)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نموذج تأكيد الحذف -->
+    <form asp-action="Delete" method="post">
+        <!-- الحقل المخفي للمعرف -->
+        <input type="hidden" asp-for="Id" />
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-danger px-4">تأكيد الحذف النهائي</button>
+            <a asp-action="Index" class="btn btn-outline-secondary px-4">إلغاء والعودة</a>
+        </div>
+    </form>
+</div>

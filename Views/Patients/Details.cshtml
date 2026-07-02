@@ -1,0 +1,58 @@
+﻿@model Clinc.Models.Patients
+
+@{
+    ViewData["Title"] = "تفاصيل المريض";
+}
+
+<div class="container mt-4" dir="rtl">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary m-0">
+            <i class="bi bi-person-card-text me-2"></i> تفاصيل ملف المريض
+        </h2>
+        <span class="badge bg-success fs-6 p-2">سجل نشط</span>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-light py-3">
+            <h5 class="card-title m-0 text-muted">المعلومات الشخصية والاتصال</h5>
+        </div>
+        <div class="card-body p-4">
+
+            <div class="row g-4 fs-5">
+                <div class="col-md-6">
+                    <span class="text-muted d-block small fw-bold mb-1">اسم المريض</span>
+                    <strong class="text-dark">@Model.Patient_Name</strong>
+                </div>
+
+                <div class="col-md-6">
+                    <span class="text-muted d-block small fw-bold mb-1">العمر</span>
+                    <span class="badge bg-secondary-subtle text-dark fs-6 px-3 py-1 mt-1">@Model.Age سنة</span>
+                </div>
+
+                <div class="col-md-6">
+                    <span class="text-muted d-block small fw-bold mb-1">رقم الهاتف</span>
+                    <span class="text-secondary direction-ltr d-inline-block">
+                        @(string.IsNullOrEmpty(Model.Phone) ? "غير مسجل" : Model.Phone)
+                    </span>
+                </div>
+
+                <div class="col-md-6">
+                    <span class="text-muted d-block small fw-bold mb-1">العنوان السكني</span>
+                    <span class="text-dark fs-6">
+                        @(string.IsNullOrEmpty(Model.Address) ? "غير محدد" : Model.Address)
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning px-4">
+            <i class="bi bi-pencil-square"></i> تعديل البيانات
+        </a>
+        <a asp-action="Index" class="btn btn-outline-secondary px-4">
+            <i class="bi bi-arrow-right"></i> رجوع للقائمة
+        </a>
+    </div>
+</div>

@@ -1,0 +1,196 @@
+﻿@model IEnumerable<Clinc.Models.Patients>
+
+@{
+    ViewData["Title"] = "المرضى";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+    /* =================================================== */
+    /* تنسيق كارد الجدول ليكون عصري ونظيف */
+    /* =================================================== */
+    .custom-card {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        background: #ffffff;
+        overflow: hidden;
+        margin-top: 2rem;
+    }
+
+    .custom-card-header {
+        background: #ffffff;
+        border-bottom: 1px solid #F1F5F9;
+        padding: 1.5rem 2rem;
+    }
+
+    .main-title {
+        font-weight: 700;
+        color: #1E293B;
+        font-size: 1.4rem;
+    }
+
+    .btn-create {
+        background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 0.6rem 1.3rem;
+        font-weight: 600;
+        transition: all 0.25s ease;
+    }
+
+        .btn-create:hover {
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+            transform: translateY(-1px);
+        }
+
+    /* =================================================== */
+    /* تنسيقات الجدول المودرن */
+    /* =================================================== */
+    .custom-table {
+        margin-bottom: 0;
+    }
+
+        .custom-table thead {
+            background-color: #F8FAFC;
+        }
+
+        .custom-table th {
+            color: #64748B;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-bottom: 2px solid #E2E8F0 !important;
+            padding: 1.2rem 1rem !important;
+        }
+
+        .custom-table td {
+            padding: 1.1rem 1rem !important;
+            color: #334155;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #F1F5F9;
+        }
+
+        .custom-table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+            .custom-table tbody tr:hover {
+                background-color: #F8FAFC !important;
+            }
+
+    /* تمييز لطيف لبعض البيانات السريعة */
+    .age-badge {
+        background-color: #F1F5F9;
+        color: #475569;
+        padding: 0.3rem 0.6rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+    .phone-text {
+        font-family: 'Courier New', Courier, monospace; /* مريح في قراءة الأرقام */
+        font-weight: 600;
+        color: #0f172a;
+    }
+
+    /* تنسيق أزرار التحكم الصغيرة الأيقونية */
+    .action-btn {
+        border-radius: 8px;
+        width: 35px;
+        height: 35px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 2px;
+        transition: all 0.2s ease;
+        border: none;
+    }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+</style>
+
+<div class="container" dir="rtl">
+    <div class="card custom-card">
+
+        <div class="card-header custom-card-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0 main-title">
+                <i class="bi bi-people-fill text-primary me-2"></i> سجل المرضى المسجلين
+            </h3>
+
+            <a asp-action="Create" class="btn btn-primary btn-create text-white">
+                <i class="bi bi-person-plus-fill me-1"></i> إضافة مريض جديد
+            </a>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table custom-table text-center align-middle">
+                    <thead>
+                        <tr>
+                            <th><i class="bi bi-person me-1"></i> اسم المريض</th>
+                            <th><i class="bi bi-geo-alt me-1"></i> العنوان</th>
+                            <th><i class="bi bi-calendar-event me-1"></i> العمر</th>
+                            <th><i class="bi bi-telephone me-1"></i> رقم الهاتف</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="font-weight-600 text-start ps-4">@item.Patient_Name</td>
+
+                                    <td class="text-secondary">@(string.IsNullOrEmpty(item.Address) ? "غير محدد" : item.Address)</td>
+
+                                    <td>
+                                        <span class="age-badge">@item.Age سنة</span>
+                                    </td>
+
+                                    <td>
+                                        <span class="phone-text">@item.Phone</span>
+                                    </td>
+
+                                    <td>
+                                        <a asp-action="Details" asp-route-id="@item.Id"
+                                           class="btn btn-info text-white action-btn" title="ملف المريض">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </a>
+
+                                        <a asp-action="Edit" asp-route-id="@item.Id"
+                                           class="btn btn-warning text-white action-btn" title="تعديل البيانات">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                                        {
+                                            <a asp-action="Delete" asp-route-id="@item.Id"
+                                            class="btn btn-danger text-white action-btn" title="حذف المريض">
+                                                <i class="bi bi-trash3-fill"></i>
+                                            </a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="bi bi-person-x display-6 d-block mb-3 text-secondary"></i>
+                                    لا يوجد مرضى مسجلين في قاعدة البيانات حالياً.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

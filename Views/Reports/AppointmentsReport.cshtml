@@ -1,0 +1,99 @@
+﻿@model Clinc.ViewModels.AppointmentsReportVM
+
+@{
+    ViewData["Title"] = "تقرير المواعيد";
+}
+
+<div class="container mt-4" dir="rtl">
+    <div class="d-flex align-items-center mb-4">
+        <h2 class="text-primary m-0"><i class="bi bi-file-earmark-bar-graph me-2"></i> تقرير المواعيد الطبية</h2>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body bg-light p-4">
+            <form asp-action="AppointmentsReport" method="post">
+                <div class="row align-items-end g-3">
+
+                    <div class="col-md-4">
+                        <label asp-for="FromDate" class="form-label fw-bold text-secondary">من تاريخ</label>
+                        <input asp-for="FromDate" type="date" class="form-control" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="ToDate" class="form-label fw-bold text-secondary">إلى تاريخ</label>
+                        <input asp-for="ToDate" type="date" class="form-control" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">
+                            <i class="bi bi-search me-1"></i> توليد التقرير
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model.Appointments != null)
+    {
+        <hr class="my-4" />
+
+        @if (Model.Appointments.Any())
+        {
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="text-muted mb-0">نتائج التقرير (@Model.Appointments.Count() موعد)</h5>
+                <button onclick="window.print();" class="btn btn-outline-dark btn-sm d-print-none">
+                    <i class="bi bi-printer me-1"></i> طباعة التقرير
+                </button>
+            </div>
+
+            <div class="table-responsive card shadow-sm">
+                <table class="table table-hover align-middle mb-0 text-center">
+                    <thead class="table-primary text-dark">
+                        <tr>
+                            <th scope="col" class="text-start pr-4">المريض</th>
+                            <th scope="col">الدكتور</th>
+                            <th scope="col">التاريخ والوقت</th>
+                            <th scope="col">الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Appointments)
+                        {
+                            <tr>
+                                <td class="text-start fw-bold pr-4">
+                                    @(item.Patient?.Patient_Name ?? "مريض غير مسجل")
+                                </td>
+                                <td>
+                                    <span class="text-secondary"> الدكتور/</span> @(item.Doctor?.Doctor_Name ?? "غير محدد")
+                                </td>
+                                <td>
+                                    <span class="direction-ltr d-inline-block">
+                                        @item.AppointmentDate.ToString("dd/MM/yyyy hh:mm tt")
+                                    </span>
+                                </td>
+                                <td>
+                                    @{
+                                        var badgeClass = item.Status == "مؤكد" ? "bg-success" :
+                                        item.Status == "ملغي" ? "bg-danger" :
+                                        item.Status == "مكتمل" ? "bg-info text-dark" : "bg-warning text-dark";
+                                    }
+                                    <span class="badge @badgeClass px-3 py-2">@item.Status</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info text-center p-4 shadow-sm" role="alert">
+                <i class="bi bi-info-circle fs-3 d-block mb-2"></i>
+                <h5>لا توجد مواعيد مسجلة في هذه الفترة الزمنية!</h5>
+                <p class="text-muted mb-0">يرجى تغيير نطاق التواريخ والمحاولة مرة أخرى.</p>
+            </div>
+        }
+    }
+</div>

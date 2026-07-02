@@ -1,0 +1,320 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - نظام إدارة العيادة</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <style>
+        /* =================================================== */
+        /* المتغيرات الأساسية لدعم الـ Light & Dark Mode */
+        /* =================================================== */
+        :root {
+            --bg-body: #F8FAFC;
+            --bg-card: #ffffff;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-color: #F1F5F9;
+            --nav-bg: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%);
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0F172A;
+            --bg-card: #1E293B;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --border-color: #334155;
+            --nav-bg: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+        }
+
+        /* تنسيقات عامة مبنية على المتغيرات */
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* =================================================== */
+        /* تنسيق الهيدر والـ Navbar المودرن */
+        /* =================================================== */
+        .custom-navbar {
+            background: var(--nav-bg) !important;
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .navbar-brand {
+            font-size: 1.25rem;
+            letter-spacing: 0.5px;
+        }
+
+            .navbar-brand i {
+                margin-left: 6px;
+                color: #38BDF8; /* لمسة زرقاء مضيئة للايقونة */
+            }
+
+        .nav-link {
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            color: rgba(255, 255, 255, 0.85) !important;
+        }
+
+            .nav-link i {
+                margin-left: 4px;
+                opacity: 0.8;
+            }
+
+            .nav-link:hover, .nav-item.active .nav-link {
+                color: #ffffff !important;
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+
+        /* زر تحويل الثيم المودرن */
+        #themeToggle {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            font-size: 1.1rem;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+            #themeToggle:hover {
+                background: rgba(255, 255, 255, 0.15);
+                transform: scale(1.05);
+            }
+
+        /* =================================================== */
+        /* الحاوية الرئيسية والفوتر الأنيق */
+        /* =================================================== */
+        .main-wrapper {
+            flex: 1;
+        }
+
+        .custom-footer {
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 1.5rem 0;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: auto;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+            .custom-footer i {
+                color: #EF4444;
+                animation: pulse 1.5s infinite;
+            }
+
+        /* ربط الكروت والجداول التي قمنا بعملها بالثيم الجديد تلقائياً */
+        .doctor-card, .patient-card, .edit-patient-card, .edit-doctor-card, .custom-card, .stat-card, .doctor-schedule-card {
+            background-color: var(--bg-card) !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-main) !important;
+        }
+
+        .custom-table th {
+            background-color: var(--bg-body) !important;
+            color: var(--text-muted) !important;
+            border-bottom-color: var(--border-color) !important;
+        }
+
+        .custom-table td {
+            color: var(--text-main) !important;
+            border-bottom-color: var(--border-color) !important;
+        }
+
+        .analysis-bar {
+            background-color: var(--bg-body) !important;
+            border-color: var(--border-color) !important;
+        }
+
+        @@keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-dark custom-navbar shadow-sm">
+            <div class="container">
+
+                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-user-md"></i> نظام العيادة الذكي
+                </a>
+
+                <button id="themeToggle" class="btn text-white order-lg-last ms-lg-3" title="تغيير المظهر">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarContent"
+                        aria-controls="navbarContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav me-auto mb-1 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-th-large"></i> لوحة التحكم
+                            </a>
+                        </li>
+                        @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Doctors" asp-action="Index">
+                                    <i class="fas fa-user-nurse"></i> الأطباء
+                                </a>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Patients" asp-action="Index">
+                                <i class="fas fa-wheelchair"></i> المرضى
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Appointment" asp-action="Index">
+                                <i class="fas fa-clock"></i> إدارة المواعيد
+                            </a>
+                        </li>
+                        @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Reports" asp-action="Index">
+                                    <i class="fas fa-chart-pie"></i> التقارير الطبية
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Users" asp-action="Index">
+                                    <i class="fas user-select-all"></i> إدارة المستخدمين
+                                </a>
+                            </li>
+                        }
+
+                    </ul>
+                    <div class="d-flex align-items-center">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <form asp-controller="Account"
+                                  asp-action="Logout"
+                                  method="post"
+                                  class="d-inline">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="btn btn-outline-light rounded-pill px-1">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    تسجيل الخروج
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a class="btn btn-outline-light rounded-pill px-1"
+                               asp-controller="Account"
+                               asp-action="Login">
+                                <i class="fas fa-sign-in-alt"></i>
+                                تسجيل الدخول
+                            </a>
+                        }
+                    </div>
+                    
+                </div>
+
+            </div>
+        </nav>
+
+        <div class="container mt-4 mb-5">
+            @RenderBody()
+        </div>
+    </div>
+
+    <footer class="custom-footer text-center">
+        <div class="container">
+            <p class="mb-0">
+               تم التطوير بواسطة محمد عزام / للتواصل : 01029659972
+            </p>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        // ===================================================
+        // سيستم الـ Dark & Light Mode التفاعلي والذكي
+        // ===================================================
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const currentTheme = localStorage.getItem('theme') || 'light';
+
+        // تطبيق الثيم المحفوظ فوراً عند تحميل الصفحة لمنع الـ Flicker
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeIcon.className = 'fas fa-sun text-warning';
+        } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            themeIcon.className = 'fas fa-moon';
+        }
+
+        // مستمع الحدث للتحويل عند الضغط
+        themeToggleBtn.addEventListener('click', () => {
+            let theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                themeIcon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeIcon.className = 'fas fa-sun text-warning';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>
