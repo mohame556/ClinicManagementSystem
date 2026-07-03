@@ -17,5 +17,6 @@ namespace Clinc.ViewModels
         public int TotalAppointments { get; set; }
 
         public int TotalPatients { get; set; }
+        public decimal TotalAmount { get; set; }
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clinc.Migrations
 {
     [DbContext(typeof(AppDbcontext))]
-    [Migration("20260702224253_001")]
-    partial class _001
+    [Migration("20260703220359_0001")]
+    partial class _0001
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

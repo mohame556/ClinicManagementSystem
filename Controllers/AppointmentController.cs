@@ -69,6 +69,8 @@ namespace Clinc.Controllers
         {
             if (ModelState.IsValid)
             {
+                vm.IsFollowUp = vm.VisitType == "إعادة";
+
                 var doctor = _context.Doctors.FirstOrDefault(d => d.Id == vm.DoctorId);
 
                 decimal fees = 0;
@@ -79,7 +81,6 @@ namespace Clinc.Controllers
                         ? doctor.ReExaminationFee
                         : doctor.ExaminationFee;
                 }
-
                 var appointment = new Appointment
                 {
                     DoctorId = vm.DoctorId,
@@ -87,6 +88,7 @@ namespace Clinc.Controllers
                     AppointmentDate = vm.AppointmentDate,
                     Status = "Pending",
                     IsFollowUp = vm.IsFollowUp,
+                    VisitType = vm.IsFollowUp ? "إعادة كشف" : "كشف جديد",
                     Notes = vm.Notes,
                     Fees = fees
                 };

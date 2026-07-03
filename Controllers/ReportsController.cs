@@ -39,7 +39,10 @@ namespace Clinc.Controllers
             var query = _context.Appointments
                 .Include(a => a.Patient)
                 .Include(a => a.Doctor)
-                .Where(a => a.DoctorId == vm.DoctorId);
+                .Include(a => a.Transaction)
+                .Where(a => a.DoctorId == vm.DoctorId
+                         && a.Transaction != null
+                         && !a.Transaction.IsDeleted);
 
             if (vm.FromDate.HasValue)
             {
@@ -62,9 +65,10 @@ namespace Clinc.Controllers
                 .Distinct()
                 .Count();
 
+            vm.TotalAmount = vm.Appointments.Sum(a => a.Fees);
+
             return View(vm);
         }
-
         [HttpGet]
         public IActionResult PatientReport()
         {

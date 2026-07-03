@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Clinc.Migrations
 {
     /// <inheritdoc />
-    public partial class _001 : Migration
+    public partial class _0001 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

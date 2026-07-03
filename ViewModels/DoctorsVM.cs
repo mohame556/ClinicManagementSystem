@@ -25,5 +25,6 @@ namespace Clinc.ViewModels
         [Required(ErrorMessage = "رسوم إعادة الكشف مطلوبة")]
         [Range(1, 100000, ErrorMessage = "رسوم إعادة الكشف يجب أن تكون أكبر من 0")]
         public decimal ReExaminationFee { get; set; }
+        
     }
 }
