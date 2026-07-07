@@ -49,9 +49,10 @@ namespace Clinc.Controllers
                 TodayAppointments = todayAppointments,
 
                 TodayAppointmentsCount = todayAppointments.Count,
-
-                ConfirmedAppointmentsCount = todayAppointments
-                    .Count(a => a.Status == "Confirmed"),
+                ConfirmedAppointmentsCount = _context.Appointments
+    .Count(a =>
+        a.AppointmentDate.Date == DateTime.Today &&
+        (a.Status == "Paid" || a.Status == "Completed")),
 
                 CancelledAppointmentsCount = todayAppointments
                     .Count(a => a.Status == "Cancelled"),

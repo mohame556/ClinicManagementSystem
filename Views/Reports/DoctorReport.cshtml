@@ -149,6 +149,25 @@
         background-color: #e2e8f0;
         color: #4a5568;
     }
+    
+    .custom-table-footer {
+        background-color: #f8fafc; /* لون خلفية هادئ ومريح للعين ومتناسق مع التصميم */
+        border-top: 2px solid #e2e8f0;
+    }
+
+    .custom-table-footer td {
+        padding: 18px 15px !important; /* زيادة المساحة العمودية للفوتر ليعطي شعوراً بالراحة */
+        font-size: 1.05rem;
+    }
+
+    .custom-table-footer .footer-label {
+        color: #4a5568;
+    }
+
+    .custom-table-footer .footer-value {
+        font-size: 1.15rem; /* تكبير حجم الخط للإجمالي لتمييزه */
+        text-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    }
 </style>
 
 <div class="container mt-5" dir="rtl" class="text-right">
@@ -254,7 +273,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <!-- تم وضع الحالة داخل بادج رمزي أنيق -->
+                                   
                                     <span class="status-badge">@item.Status</span>
                                 </td>
                                 <td class="text-muted">@(string.IsNullOrEmpty(item.Notes) ? "-" : item.Notes)</td>
@@ -267,17 +286,17 @@
                             </tr>
                         }
                     </tbody>
+                    <tfoot class="custom-table-footer">
+                        <tr>
+                            <td colspan="5" class="text-start fw-bold footer-label">
+                                إجمالي قيمة الكشوفات:
+                            </td>
+                            <td class="fw-bold footer-value text-success">
+                                @Model.TotalAmount.ToString("N0") ج.م
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
-                <tfoot>
-                    <tr class="table-primary fw-bold">
-                        <td colspan="5" class="text-end">
-                            إجمالي قيمة الكشوفات
-                        </td>
-                        <td>
-                            @Model.TotalAmount.ToString("N0") ج.م
-                        </td>
-                    </tr>
-                </tfoot>
             </div>
         </div>
     }

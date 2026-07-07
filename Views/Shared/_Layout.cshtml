@@ -13,9 +13,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
     <style>
-        /* =================================================== */
-        /* المتغيرات الأساسية لدعم الـ Light & Dark Mode */
-        /* =================================================== */
+        
         :root {
             --bg-body: #F8FAFC;
             --bg-card: #ffffff;
@@ -26,15 +24,15 @@
         }
 
         [data-theme="dark"] {
-            --bg-body: #0F172A;
-            --bg-card: #1E293B;
-            --text-main: #F8FAFC;
-            --text-muted: #94A3B8;
-            --border-color: #334155;
-            --nav-bg: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            --bg-body: #0D0D0D;
+            --bg-card: #1A1A1A;
+            --text-main: #F5F5F5;
+            --text-muted: #CFCFCF;
+            --border-color: #333333;
+            --nav-bg: linear-gradient(135deg,#111111,#1A1A1A);
         }
 
-        /* تنسيقات عامة مبنية على المتغيرات */
+        
         body {
             font-family: 'Cairo', sans-serif;
             background-color: var(--bg-body);
@@ -45,9 +43,7 @@
             flex-direction: column;
         }
 
-        /* =================================================== */
-        /* تنسيق الهيدر والـ Navbar المودرن */
-        /* =================================================== */
+      
         .custom-navbar {
             background: var(--nav-bg) !important;
             padding: 0.85rem 1rem;
@@ -61,7 +57,7 @@
 
             .navbar-brand i {
                 margin-left: 6px;
-                color: #38BDF8; /* لمسة زرقاء مضيئة للايقونة */
+                color: #38BDF8; 
             }
 
         .nav-link {
@@ -83,7 +79,7 @@
                 background-color: rgba(255, 255, 255, 0.1);
             }
 
-        /* زر تحويل الثيم المودرن */
+    
         #themeToggle {
             border-radius: 50%;
             width: 40px;
@@ -103,9 +99,7 @@
                 transform: scale(1.05);
             }
 
-        /* =================================================== */
-        /* الحاوية الرئيسية والفوتر الأنيق */
-        /* =================================================== */
+       
         .main-wrapper {
             flex: 1;
         }
@@ -126,7 +120,6 @@
                 animation: pulse 1.5s infinite;
             }
 
-        /* ربط الكروت والجداول التي قمنا بعملها بالثيم الجديد تلقائياً */
         .doctor-card, .patient-card, .edit-patient-card, .edit-doctor-card, .custom-card, .stat-card, .doctor-schedule-card {
             background-color: var(--bg-card) !important;
             border-color: var(--border-color) !important;
@@ -150,18 +143,14 @@
         }
 
         @@keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.1);
-            }
-
-            100% {
-                transform: scale(1);
-            }
+            ...
         }
+
+        
+
+        [data-theme="dark"] .card,
+        [data-theme="dark"] .table,
+        ...
     </style>
 </head>
 
@@ -171,13 +160,13 @@
         <nav class="navbar navbar-expand-lg navbar-dark custom-navbar shadow-sm">
             <div class="container">
 
-                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
+                <a class="navbar-brand fw-bold">
                     <i class="fas fa-user-md"></i> نظام العيادة الذكي
                 </a>
 
-                <button id="themeToggle" class="btn text-white order-lg-last ms-lg-3" title="تغيير المظهر">
+              /*   <button id="themeToggle" class="btn text-white order-lg-last ms-lg-3" title="تغيير المظهر">
                     <i class="fas fa-moon" id="themeIcon"></i>
-                </button>
+                </button> */
 
                 <button class="navbar-toggler"
                         type="button"
@@ -283,14 +272,11 @@
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 
     <script>
-        // ===================================================
-        // سيستم الـ Dark & Light Mode التفاعلي والذكي
-        // ===================================================
+      
         const themeToggleBtn = document.getElementById('themeToggle');
         const themeIcon = document.getElementById('themeIcon');
         const currentTheme = localStorage.getItem('theme') || 'light';
 
-        // تطبيق الثيم المحفوظ فوراً عند تحميل الصفحة لمنع الـ Flicker
         if (currentTheme === 'dark') {
             document.documentElement.setAttribute('data-theme', 'dark');
             themeIcon.className = 'fas fa-sun text-warning';
@@ -299,7 +285,7 @@
             themeIcon.className = 'fas fa-moon';
         }
 
-        // مستمع الحدث للتحويل عند الضغط
+      
         themeToggleBtn.addEventListener('click', () => {
             let theme = document.documentElement.getAttribute('data-theme');
             if (theme === 'dark') {
