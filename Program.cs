@@ -1,5 +1,6 @@
 using Clinc.Data;
 using Clinc.Models;
+using Clinc.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,6 +30,7 @@ namespace Clinc
             .AddEntityFrameworkStores<AppDbcontext>()
             .AddDefaultTokenProviders();
 
+            builder.Services.AddSingleton<LicenseService>();
             var app = builder.Build();
 
             if (!app.Environment.IsDevelopment())

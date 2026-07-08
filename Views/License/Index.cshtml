@@ -1,0 +1,95 @@
+﻿@model Clinc.ViewModels.LicenseVM
+
+@{
+    ViewData["Title"] = "تفعيل البرنامج";
+}
+
+<div class="container mt-5" dir="rtl">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-7">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-warning">
+                    <h4 class="mb-0">
+                        <i class="bi bi-key-fill"></i>
+                        تفعيل البرنامج
+                    </h4>
+                </div>
+
+                <div class="card-body">
+
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @TempData["Success"]
+                        </div>
+                    }
+
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            @TempData["Error"]
+                        </div>
+                    }
+
+                    <form asp-action="Activate" method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <div class="mb-3">
+
+                            <label asp-for="MachineId" class="form-label">
+                                Machine ID
+                            </label>
+
+                            <input asp-for="MachineId"
+                                   class="form-control"
+                                   readonly />
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="LicenseKey" class="form-label">
+                                كود التفعيل
+                            </label>
+
+                            <input asp-for="LicenseKey"
+                            type="password"
+                                   class="form-control"
+                                   placeholder="أدخل كود التفعيل" />
+
+                            <span asp-validation-for="LicenseKey"
+                                  class="text-danger"></span>
+
+                        </div>
+
+                        <button type="submit"
+                                class="btn btn-success">
+
+                            <i class="bi bi-check-circle-fill"></i>
+
+                            تفعيل البرنامج
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

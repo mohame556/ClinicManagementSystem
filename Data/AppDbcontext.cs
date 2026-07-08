@@ -18,6 +18,7 @@ namespace Clinc.Data
 
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<License> Licenses { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
